@@ -11,11 +11,18 @@ import {
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MCIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Feather from "react-native-vector-icons/Feather";
+import _ from "lodash";
 
 const screen = Dimensions.get("window");
 const buttonWidth = screen.width / 4;
 export default function App() {
-  const [state, setState] = useState("sad");
+  const [state, setState] = useState("");
+
+  function handleClick(e) {
+    let value = state.concat(e);
+    setState(value);
+    console.log(value);
+  }
   return (
     <SafeAreaView style={styles.dashboard}>
       <View style={styles.row}>
@@ -30,15 +37,25 @@ export default function App() {
         <AntDesign style={styles.items} name="bars" size={25} color="white" />
       </View>
       <View style={styles.row1}>
-        <Text></Text>
+        <Text style={styles.value}>{state}</Text>
       </View>
       <View style={styles.row2}>
         <View style={{ flex: 1, flexDirection: "row" }}>
           {/* 1st Row */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setState("");
+            }}
+          >
             <Text style={styles.text}>C</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            onPress={() => {
+              handleClick("%");
+            }}
+            style={styles.button}
+          >
             <Text style={styles.text}>%</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
@@ -50,13 +67,28 @@ export default function App() {
         </View>
         <View style={{ flex: 1, flexDirection: "row" }}>
           {/* 2nd Row */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("7");
+            }}
+          >
             <Text style={styles.text}>7</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("8");
+            }}
+          >
             <Text style={styles.text}>8</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("9");
+            }}
+          >
             <Text style={styles.text}>9</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.operations}>
@@ -65,13 +97,28 @@ export default function App() {
         </View>
         <View style={{ flex: 1, flexDirection: "row" }}>
           {/* 2nd Row */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("4");
+            }}
+          >
             <Text style={styles.text}>4</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("5");
+            }}
+          >
             <Text style={styles.text}>5</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("6");
+            }}
+          >
             <Text style={styles.text}>6</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.operations}>
@@ -80,13 +127,28 @@ export default function App() {
         </View>
         <View style={{ flex: 1, flexDirection: "row" }}>
           {/* 2nd Row */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("1");
+            }}
+          >
             <Text style={styles.text}>1</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("2");
+            }}
+          >
             <Text style={styles.text}>2</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("3");
+            }}
+          >
             <Text style={styles.text}>3</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.operations}>
@@ -98,10 +160,20 @@ export default function App() {
           <TouchableOpacity style={styles.button}>
             <Text style={styles.text}>00</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick("0");
+            }}
+          >
             <Text style={styles.text}>0</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleClick(".");
+            }}
+          >
             <Text style={styles.text}>.</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -171,5 +243,12 @@ const styles = StyleSheet.create({
     borderRadius: Math.floor(buttonWidth),
     margin: 5,
     marginTop: 15,
+  },
+  value: {
+    color: "#fff",
+    fontSize: 40,
+    textAlign: "right",
+    marginRight: 20,
+    marginBottom: 10,
   },
 });
