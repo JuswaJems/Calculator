@@ -15,13 +15,79 @@ import _ from "lodash";
 
 const screen = Dimensions.get("window");
 const buttonWidth = screen.width / 4;
+const initialState = {
+  currentValue: "",
+  previousValue: null,
+  operator: null,
+};
 export default function App() {
-  const [state, setState] = useState("");
+  const [state, setState] = useState(initialState);
+  const [display, setDisplay] = useState({ currentDisplay: "", result: "" });
 
-  function handleClick(e) {
-    let value = state.concat(e);
-    setState(value);
-    console.log(value);
+  function handleNumbers(e) {
+    setDisplay({
+      ...display,
+      currentDisplay: display?.currentDisplay?.concat(e),
+    });
+    setState({ ...state, currentValue: state?.currentValue?.concat(e) });
+  }
+  function handleOperations(e) {
+    if (state?.operator || e === "=") {
+      let result = 0;
+      if (state?.operator === "÷") {
+        result =
+          parseFloat(state?.previousValue) / parseFloat(state?.currentValue);
+        setDisplay({
+          ...display,
+          currentDisplay: result + " " + e,
+          result: result,
+        });
+      }
+      if (state?.operator === "x") {
+        result =
+          parseFloat(state?.previousValue) * parseFloat(state?.currentValue);
+        setDisplay({
+          ...display,
+          currentDisplay: result + " " + e,
+          result: result,
+        });
+      }
+      if (state?.operator === "-") {
+        result =
+          parseFloat(state?.previousValue) - parseFloat(state?.currentValue);
+        setDisplay({
+          ...display,
+          currentDisplay: result + " " + e,
+          result: result,
+        });
+      }
+      if (state?.operator === "+") {
+        result =
+          parseFloat(state?.previousValue) + parseFloat(state?.currentValue);
+        setDisplay({
+          ...display,
+          currentDisplay: result + " " + e,
+          result: result,
+        });
+      }
+      setState({
+        ...state,
+        currentValue: "",
+        previousValue: result,
+        operator: e,
+      });
+    } else {
+      setDisplay({
+        ...display,
+        currentDisplay: display?.currentDisplay?.concat(" " + e + " "),
+      });
+      setState({
+        ...state,
+        currentValue: "",
+        previousValue: state?.currentValue,
+        operator: e,
+      });
+    }
   }
   return (
     <SafeAreaView style={styles.dashboard}>
@@ -37,7 +103,7 @@ export default function App() {
         <AntDesign style={styles.items} name="bars" size={25} color="white" />
       </View>
       <View style={styles.row1}>
-        <Text style={styles.value}>{state}</Text>
+        <Text style={styles.value}>{display?.currentDisplay}</Text>
       </View>
       <View style={styles.row2}>
         <View style={{ flex: 1, flexDirection: "row" }}>
@@ -45,14 +111,24 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              setState("");
+              setDisplay({
+                ...display,
+                currentDisplay: "",
+                result: "",
+              });
+              setState({
+                ...state,
+                currentValue: "",
+                previousValue: "",
+                operator: "",
+              });
             }}
           >
             <Text style={styles.text}>C</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              handleClick("%");
+              handleNumbers("%");
             }}
             style={styles.button}
           >
@@ -61,7 +137,12 @@ export default function App() {
           <TouchableOpacity style={styles.button}>
             <Feather name="delete" style={styles.text} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.operations}>
+          <TouchableOpacity
+            onPress={() => {
+              handleOperations("÷");
+            }}
+            style={styles.operations}
+          >
             <Feather name="divide" style={styles.text} />
           </TouchableOpacity>
         </View>
@@ -70,7 +151,7 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("7");
+              handleNumbers("7");
             }}
           >
             <Text style={styles.text}>7</Text>
@@ -78,7 +159,7 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("8");
+              handleNumbers("8");
             }}
           >
             <Text style={styles.text}>8</Text>
@@ -86,12 +167,17 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("9");
+              handleNumbers("9");
             }}
           >
             <Text style={styles.text}>9</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.operations}>
+          <TouchableOpacity
+            style={styles.operations}
+            onPress={() => {
+              handleOperations("x");
+            }}
+          >
             <Text style={styles.text}>x</Text>
           </TouchableOpacity>
         </View>
@@ -100,7 +186,7 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("4");
+              handleNumbers("4");
             }}
           >
             <Text style={styles.text}>4</Text>
@@ -108,7 +194,7 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("5");
+              handleNumbers("5");
             }}
           >
             <Text style={styles.text}>5</Text>
@@ -116,12 +202,17 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("6");
+              handleNumbers("6");
             }}
           >
             <Text style={styles.text}>6</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.operations}>
+          <TouchableOpacity
+            style={styles.operations}
+            onPress={() => {
+              handleOperations("-");
+            }}
+          >
             <Text style={styles.text}>-</Text>
           </TouchableOpacity>
         </View>
@@ -130,7 +221,7 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("1");
+              handleNumbers("1");
             }}
           >
             <Text style={styles.text}>1</Text>
@@ -138,7 +229,7 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("2");
+              handleNumbers("2");
             }}
           >
             <Text style={styles.text}>2</Text>
@@ -146,12 +237,17 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("3");
+              handleNumbers("3");
             }}
           >
             <Text style={styles.text}>3</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.operations}>
+          <TouchableOpacity
+            style={styles.operations}
+            onPress={() => {
+              handleOperations("+");
+            }}
+          >
             <Text style={styles.text}>+</Text>
           </TouchableOpacity>
         </View>
@@ -163,7 +259,7 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick("0");
+              handleNumbers("0");
             }}
           >
             <Text style={styles.text}>0</Text>
@@ -171,13 +267,16 @@ export default function App() {
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              handleClick(".");
+              handleNumbers(".");
             }}
           >
             <Text style={styles.text}>.</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ ...styles.operations, backgroundColor: "#3768b8" }}
+            onPress={() => {
+              handleOperations("=");
+            }}
           >
             <Text style={styles.text}>=</Text>
           </TouchableOpacity>
